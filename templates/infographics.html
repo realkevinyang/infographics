@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        img {
+            max-width: 600px;
+        }
+
+        .options {
+            margin: 1em 0;
+        }
+
+        .selected {
+            background-color: #007bff !important;
+            color: white;
+        }
+    </style>
+    <title>Info Graphics</title>
+</head>
+
+<body>
+    <img src="../static/assets/graphs/graph1.png" id="graph" class="img-fluid mb-4">
+    <p id="question" class="text-center">Question1</p>
+    <div class="options" id="options">
+        <p class="bg-light p-2 rounded" id="option1">Option 1</p>
+        <p class="bg-light p-2 rounded" id="option2">Option 2</p>
+        <p class="bg-light p-2 rounded" id="option3">Option 3</p>
+        <p class="bg-light p-2 rounded" id="option4">Option 4</p>
+    </div>
+    <button id="next" class="btn btn-primary">Next</button>
+    <script>
+        window.addEventListener("load", () => {
+            let startTime = new Date().getTime();
+
+            const answers = [];
+            questions = [
+                {% for item in questions %}
+                {{ item | tojson }},
+            {% endfor %}
+    ];
+
+        let currentQuestionIndex = 0;
+        let selectedAnswer = undefined;
+
+        const sendData = () => {
+            fetch("http://127.0.0.1:5000/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    totalTime: (new Date().getTime() - startTime) / 1000,
+                    answers
+                })
+            });
+        };
+        const renderQuestion = (questionIndex) => {
+            document.getElementById('graph').src = questions[questionIndex].graphImage;
+            document.getElementById("question").innerHTML = questions[questionIndex].question;
+            clearOptionSelection();
+            document.getElementById("option1").innerHTML = questions[questionIndex].options[0];
+            document.getElementById("option2").innerHTML = questions[questionIndex].options[1];
+            document.getElementById("option3").innerHTML = questions[questionIndex].options[2];
+            document.getElementById("option4").innerHTML = questions[questionIndex].options[3];
+        };
+
+        const clearOptionSelection = () => {
+            selectedAnswer = undefined;
+
+            const ele = document.getElementById("options");
+            const children = ele.children;
+            for (const child of children) {
+                child.classList.remove("selected");
+            }
+        };
+
+        const handleOptionClick = (id) => {
+            clearOptionSelection();
+            const ele = document.getElementById("options");
+            const children = ele.children;
+            children[id].classList.add("selected");
+            selectedAnswer = id;
+        };
+
+        const setOptionClickHandlers = () => {
+            const ele = document.getElementById("options");
+            const children = ele.children;
+            for (let i = 0; i < 4; i++) {
+                const child = children[i];
+                child.addEventListener("click", () => { handleOptionClick(i); });
+            }
+        };
+
+        const addAnswer = (questionIndex) => {
+            answers.push({
+                id: questions[questionIndex].id,
+                answer: selectedAnswer
+            });
+        };
+
+
+        document.getElementById("next").addEventListener("click", () => {
+            if (currentQuestionIndex >= questions.length) {
+                sendData()
+                window.location.href = "/analysis"
+                return;
+            }
+            addAnswer(currentQuestionIndex);
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex >= questions.length) {
+                sendData()
+                window.location.href = "/analysis"
+                return;
+            }
+            renderQuestion(currentQuestionIndex);
+        });
+
+        renderQuestion(currentQuestionIndex);
+        setOptionClickHandlers();
+        })
+    </script>
+</body>
+
+</html>

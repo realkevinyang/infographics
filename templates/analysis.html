@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Scatter Plot</title>
+</head>
+
+<body>
+
+    <div id="scatterPlot"></div>
+    <button onclick="location.href='/'">Home</button>
+
+    <script>
+        var trace1 = {
+            x: {{X}},
+            y: {{Y}},
+            mode: 'markers',
+            type: 'scatter'
+        };
+
+        var data = [trace1];
+
+        var layout = {
+            title: 'User Performance For This Infographic',
+            xaxis: {
+                title: 'Time Elapsed',
+                showgrid: false,
+                zeroline: false
+            },
+            yaxis: {
+                title: 'Score',
+                showline: false
+            }
+        };
+
+        Plotly.newPlot('scatterPlot', data, layout);
+    </script>
+
+</body>
+
+</html>

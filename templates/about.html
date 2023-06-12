@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <title>About</title>
+
+  {% include 'navbar.html' %}
+
+</head>
+<body>
+
+  <h1>About this project.</h1>
+
+  <h3>What is the opioid crisis?</h3>
+  <p>The opioid crisis in America refers to a public health emergency characterized by a significant increase in the misuse and addiction to opioid drugs. Pharmaceutical companies, in the early 2000s, reassured healthcare providers that these medications were safe and had a low risk of addiction, leading to a surge in opioid prescriptions. However, it was evident that these promises were empty. Efforts to combat the opioid crisis have included increased regulation and monitoring of prescription opioids, the expansion of substance abuse treatment and recovery programs, increased access to naloxone (an overdose-reversing medication), and public awareness campaigns. However, addressing the crisis remains a complex and ongoing challenge, requiring a multi-faceted approach involving healthcare providers, policymakers, law enforcement, and communities.</p>
+
+  <h3>What are opioids, exactly?</h3>
+  <p>Opioids are a class of drugs that derive from, or mimic, natural substances found in the opium poppy plant, including the illegal drug heroin, synthetic opioids such as fentanyl, and pain relievers available legally by prescription, 
+    such as oxycodone (OxyContin®), hydrocodone (Vicodin®), codeine, morphine, and many others. They are the vast majority of medical drugs or illicit substances used worldwide, and are thus of most interest for analysis.
+    These drugs work in the brain to produce a variety of effects, including pain relief and a numbing feeling. Some use opioids because of the euphoria (“high”) they can produce. Thus, they can cause addiction, also known as opioid use disorder (OUD).<br>
+  </p>
+
+  <h3>Design prototypes, feedback, and takeaways.</h3>
+
+  <p>
+    <br>
+    The above graphs are protoypes for eventual visual graphics depicting certain narratives in the American opioid crisis.<br><br>
+    Classmate Brennan Cohen recommended that, in the micro graph prototype, Model 1, the second largest pie slice be relocated to the left of the largest pie slice, 
+    rather than to its right, to be in accordance to the pie chart guidelines set given in the infographic textbook. Classmate Daniel Iofin suggested adding more detailed numbers in the legend for the macro graph prototype, Model 2.<br><br>
+
+    The takeaways from this feedback are first, to be more detailed with labeling in the graph, in order to improve clarity and accuracy, and secondly, to follow graph design conventions outlined in the infographic textbook. Ultimately, the pie chart was not used; rather, a bar chart was substituted in its place.
+  </p>
+
+  <h3>The data pipeline for CDC data, seen in map infographics.</h3>
+  <ol>
+    <li>Gathered data as a .csv file from the CDC.</li>
+    <li>Using Google Sheets, removed all unnecessary columns and rows, like non opioid-related drug deaths or extraneous identifiers for states.</li>
+    <li>Using a Python data file, formatdata.py, cleansed data from the raw .csv file into a usable dictionary in a .json object. The dictionary was sorted first by state, then by year, then by month, then by drug type. The values were the number of deaths.</li>
+    <li>Using the same file, calculated national averages and yearly average and totals to be used in graphs.</li>
+  </ol>
+
+  <h3>The data pipeline for CORGIS data, seen in line graphs.</h3>
+  <ol>
+    <li>Gathered data as a .csv file from the CORGIS Datasets Project.</li>
+    <li>Using Google Sheets, removed all unnecessary columns and rows, like opioid-related drug deaths that were sorted by individual drug or prescription type.</li>
+    <li>Using a Python data file, formatdata2.py, cleansed data from the raw .csv file into a usable dictionary in a .json object. The dictionary was sorted first into years, then within each year, key value pairs. The keys were the demographic type (i.e. "Female," or "Asian") and the values were the rates of opioid-related deaths per 100,000 for that demographic.</li>
+  </ol>
+
+  {% include 'footer.html' %}
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+
+</body>
+</html>
