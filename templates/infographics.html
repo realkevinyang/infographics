@@ -48,13 +48,19 @@
 
             const answers = [];
             questions = [
-                {% for item in questions %}
+                {% for item in graphSet.questions %}
                 {{ item | tojson }},
             {% endfor %}
     ];
 
+        const graphId = {{ graphSet.id }}
+        let graphImage = "{{ graphSet.graphImage }}";
         let currentQuestionIndex = 0;
         let selectedAnswer = undefined;
+
+        const setGraphId = (graphId) => {
+            localStorage.setItem("graphId", graphId);
+        };
 
         const sendData = () => {
             fetch("http://127.0.0.1:5000/submit", {
@@ -64,12 +70,13 @@
                 },
                 body: JSON.stringify({
                     totalTime: (new Date().getTime() - startTime) / 1000,
-                    answers
+                    answers,
+                    graphId: graphId
                 })
             });
         };
         const renderQuestion = (questionIndex) => {
-            document.getElementById('graph').src = questions[questionIndex].graphImage;
+            document.getElementById('graph').src = graphImage;
             document.getElementById("question").innerHTML = questions[questionIndex].question;
             clearOptionSelection();
             document.getElementById("option1").innerHTML = questions[questionIndex].options[0];
@@ -115,16 +122,16 @@
 
         document.getElementById("next").addEventListener("click", () => {
             if (currentQuestionIndex >= questions.length) {
-                sendData()
-                window.location.href = "/analysis"
+                sendData();
+                window.location.href = "/analysis";
                 return;
             }
             addAnswer(currentQuestionIndex);
             currentQuestionIndex++;
 
             if (currentQuestionIndex >= questions.length) {
-                sendData()
-                window.location.href = "/analysis"
+                sendData();
+                window.location.href = "/analysis?graphId=" + graphId;
                 return;
             }
             renderQuestion(currentQuestionIndex);
@@ -132,6 +139,7 @@
 
         renderQuestion(currentQuestionIndex);
         setOptionClickHandlers();
+        setGraphId({{ graphSet.id }})
         })
     </script>
 </body>
