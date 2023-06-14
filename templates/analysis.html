@@ -3,41 +3,110 @@
 
 <head>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  
     <title>Scatter Plot</title>
 </head>
 
 <body>
 
     <div id="scatterPlot"></div>
+
+    <h3>Light Green: Graph 1, Green: Graph 2</h3>
+
+    <img src="{{graphImage}}" height = "450" width = "1080">
     <button onclick="location.href='/'">Home</button>
-    <img src="{{graphImage}}">
+
     
     <script>
+        var x = {{X}};
+        var y = {{Y}};
+        var G = {{G}};
+    
+        var colors = G.map(function(value) {
+          if (value === 1) {
+            return 'darkseagreen  ';
+          } else if (value === 2) {
+            return 'forestgreen';
+          } else {
+            return 'black'; // default color if G is neither 1 nor 2
+          }
+        });
+    
         var trace1 = {
-            x: {{X}},
-            y: {{Y}},
-            mode: 'markers',
-            type: 'scatter'
+          x: x,
+          y: y,
+          mode: 'markers',
+          type: 'scatter',
+          marker: {
+            size: 15,
+            color: colors  // Use the colors array for marker color
+          },
+          name: 'Graph 1'  // Legend label for red points
         };
-
-        var data = [trace1];
-
+    
+        var trace2 = {
+          x: [],  // Create an empty trace for blue points
+          y: [],
+          mode: 'markers',
+          type: 'scatter',
+          marker: {
+            size: 15,
+            color: 'forestgreen'
+          },
+          name: 'Graph 2'  // Legend label for blue points
+        };
+    
+        var data = [trace1, trace2];
+    
         var layout = {
-            title: 'User Performance For This Infographic',
-            xaxis: {
-                title: 'Time Elapsed',
-                showgrid: false,
-                zeroline: false
-            },
-            yaxis: {
-                title: 'Score',
-                showline: false
-            }
+          title: 'User performance for both infographics',
+          xaxis: {
+            title: 'Time elapsed, in seconds',
+            showgrid: true,
+            showline: false,
+            zeroline: false
+          },
+          yaxis: {
+            title: 'Score, by percentage correct',
+            showline: false
+          },
+          legend: {
+            x: 1,  // Position the legend at the top right corner
+            y: 1,
+            xanchor: 'right',
+            yanchor: 'top',
+            showlegend: true
+          }
         };
-
+    
+        // Add a separate legend for the point colors
+        var legend = {
+          x: 0.95,  // Position the separate legend in the top right corner
+          y: 0.95,
+          xanchor: 'right',
+          yanchor: 'top',
+          orientation: 'v',
+          bgcolor: 'rgba(255, 255, 255, 0.7)',
+          bordercolor: '#000',
+          borderwidth: 1,
+          traceorder: 'reversed',
+          itemsizing: 'constant',
+          itemclick: 'toggleothers',
+          itemdoubleclick: 'toggle',
+          itemwidth: 80,
+          itemheight: 20
+        };
+    
+        layout.legend = Object.assign(layout.legend, legend);
+    
         Plotly.newPlot('scatterPlot', data, layout);
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
 </body>
 
 </html>

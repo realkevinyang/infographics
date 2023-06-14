@@ -12,25 +12,49 @@ app = Flask(__name__)
 graphSet = [
     {
         "id": 1,
-        "graphImage": "../static/assets/graphs/graph1.png",
+        "graphImage": "../static/assets/graphs/graph1.jpeg",
         "questions": [
             {
                 "id": 1,
-                "question": "Question 1",
-                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-                "correctAnswer": 0,
+                "question": "1. What is the main message of this graph?",
+                "options": ["A. Despite the volatility of shares of deskless workers, the ‘energy, consumer products, and retail’ industries have the lowest future of work readiness.", "B. Industries with lowest future-of-work readiness have highest share of deskless workers.", "C. Despite the volatility of shares of deskless workers, the ‘insurance, technology, and telecom’ industries have the highest future of work readiness.", ""],
+                "correctAnswer": 1,
             },
             {
                 "id": 2,
-                "question": "Question 2",
-                "options": ["Option 10", "Option 2", "Option 3", "Option 4"],
-                "correctAnswer": 1,
+                "question": "2. What are the variables?",
+                "options": ["A. Type of company, share of deskless workers.", "B. Laggards, leaders", "C. Share of deskless workers (%), future of work readiness", ""],
+                "correctAnswer": 2,
             },
             {
                 "id": 3,
-                "question": "Question 3",
-                "options": ["Option 10", "Option 2", "Option 3", "Option 4"],
+                "question": "3. Which companies does the creator most want to highlight?",
+                "options": ["A. Laggards.", "B. Leaders.", "C. The companies that are neither laggards nor leaders.", ""],
+                "correctAnswer": 0,
+            },
+        ],
+    },
+    {
+        "id": 2,
+        "graphImage": "../static/assets/graphs/graph2.jpeg",
+        "questions": [
+            {
+                "id": 1,
+                "question": "1. What is the main message of this graph?",
+                "options": ["A. Despite the volatility of shares of deskless workers, the ‘energy, consumer products, and retail’ industries have the lowest future of work readiness.", "B. Industries with lowest future-of-work readiness have highest share of deskless workers.", "C. Despite the volatility of shares of deskless workers, the ‘insurance, technology, and telecom’ industries have the highest future of work readiness.", ""],
                 "correctAnswer": 1,
+            },
+            {
+                "id": 2,
+                "question": "2. What are the variables?",
+                "options": ["A. Type of company, share of deskless workers.", "B. Laggards, leaders", "C. Share of deskless workers (%), future of work readiness", ""],
+                "correctAnswer": 2,
+            },
+            {
+                "id": 3,
+                "question": "3. Which companies does the creator most want to highlight?",
+                "options": ["A. Laggards.", "B. Leaders.", "C. The companies that are neither laggards nor leaders.", ""],
+                "correctAnswer": 0,
             },
         ],
     },
@@ -113,12 +137,12 @@ def submit():
 @app.route("/analysis")
 def analysis():
     graphId = int(request.args.get("graphId"))
-    X, Y = read_csv("./data.csv", graphId)
+    G, X, Y = read_csv("./data.csv", graphId)
 
     fileName = "/analysis.html"
     resp = make_response(
         render_template(
-            fileName, X=X, Y=Y, graphImage=getGraphSet(graphId)["graphImage"]
+            fileName, G=G, X=X, Y=Y, graphImage=getGraphSet(graphId)["graphImage"]
         )
     )
     return resp
@@ -134,15 +158,17 @@ def write_to_csv(dict):
 
 
 def read_csv(path, graphId):
+    g = []
     x = []
     y = []
     with open(path, "r") as file:
         reader = csv.reader(file)
         for row in reader:
             if row:
+                g.append(int(row[0]))
                 x.append(float(row[1]))
                 y.append(float(row[2]))
-    return (x, y)
+    return (g, x, y)
 
 
 if __name__ == "__main__":
